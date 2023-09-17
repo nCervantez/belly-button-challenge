@@ -72,20 +72,35 @@ function bubbleChart(id) {
 })};
 
 // Function to populate the demographic info chart
+
+
 function metaData(id) {
     d3.json(url).then(function(data) {
-      
-        //All data from the metadata array. 
-        let demoData = data.metadata;
-        console.log("Meta Data: ", demoData);
-        let subjectData = demoData.find(sample => sample.id === id);
-        let keys = Object.keys(subjectData);
-        console.log(keys);
+      let demoData = data.metadata;
+      console.log("Meta Data: ", demoData);
+  
+      // Use the find method to locate the entry with the specified ID
+      let subjectData = demoData.find(sample => sample.id === id);
+  
+      // Check if the subjectData is found
+      if (subjectData) {
+        console.log("Subject Data: ", subjectData);
         
-        
-})};
+        // Now, you can access specific key-value pairs within subjectData
+        console.log("Ethnicity:", subjectData.ethnicity);
+        console.log("Gender:", subjectData.gender);
+        console.log("Age:", subjectData.age);
+        console.log("Location:", subjectData.location);
+        console.log("bbtype:", subjectData.bbtype);
+        console.log("wfreq:", subjectData.wfreq);
+      } else {
+        console.log("Subject Data not found for ID:", id);
+      }
+    });
+  }
 
-
+  
+  metaData(940);
 //Starts the charts and webpage
 d3.json(url).then((data) => {
 
@@ -108,10 +123,13 @@ d3.json(url).then((data) => {
         //Updates the hBar function with the new selected ID
         hBar(id);
         bubbleChart(id);
-        metaData(id);
+        
+        console.log("This is the value of the id", id)
+        
     });
     // Initialize the chart with the first option in our list
     hBar(namesList[0]);
     bubbleChart(namesList[0]);
-    metaData(namesList[0]);
+    
+    console.log("Initial starting ID value", namesList[0]);
 });
