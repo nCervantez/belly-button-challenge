@@ -42,21 +42,36 @@ function hBar(id) {
         width: 500
       };
 
-      //creating the bubble chart
-    //   let trace1 = {
-    //     x: barVal,
-    //     y: barLabels,
-    //     text: barDesc,
-    //     type: 'bar',
-    //     orientation: 'h'
-    //   };
-    // var layout = {
-    //     height: 400,
-    //     width: 500
-    //   };
-  
       Plotly.newPlot('bar', [trace], layout);
-      //Plotly.newPlot('bubble', [trace1], layout1);
+
+})};
+
+function bubbleChart(id) {
+    d3.json(url).then(function(data) {
+      
+      //All data from the samples array. 
+      let sampleData1 = data.samples;
+  
+      //This will update the charts based on the dropdown change
+      let chartData1 = sampleData1.find(sample => sample.id === id);
+      let bubVal = chartData1.sample_values.slice(0,10).reverse(); //Reverse the lists to have it in desc order for plotly.
+      let bubLabels = chartData1.otu_ids.slice(0,10).map((id) => `OTU ${id}`).reverse(); //Reverse the lists to have it in desc order for plotly.
+      let bubDesc = chartData1.otu_labels.slice(0,10).reverse(); //Reverse the lists to have it in desc order for plotly.
+  
+      //creating the hBar chart
+      let trace1 = {
+        x: bubLabels,
+        y: bubVal,
+        text: bubDesc,
+        mode: 'markers',
+        marker: {color: bubLabels, 
+                 size: bubVal}
+        
+      };
+
+      Plotly.newPlot('bubble', [trace1]);
+    
+  
 })};
 
 
@@ -81,7 +96,9 @@ d3.json(url).then((data) => {
         let id = this.value;
         //Updates the hBar function with the new selected ID
         hBar(id);
+        bubbleChart(id);
     });
     // Initialize the chart with the first option in our list
     hBar(namesList[0]);
+    bubbleChart(namesList[0]);
 });
