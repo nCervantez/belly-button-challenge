@@ -81,26 +81,26 @@ function metaData(id) {
   
       // Use the find method to locate the entry with the specified ID
       let subjectData = demoData.find(sample => sample.id === id);
+      let keys = Object.keys(subjectData);
+      let vals = Object.values(subjectData);
+      console.log("array keys", keys);
+      console.log("array vals", vals);
+
+      
+      let demoChart = d3.select(".panel-body")
+      for(i=0; i < keys.length; i++){
+        demoChart.append("label").text(`${keys[i]}: ${vals[i]}`);
+      }
+
+
   
       // Check if the subjectData is found
-      if (subjectData) {
-        console.log("Subject Data: ", subjectData);
-        
-        // Now, you can access specific key-value pairs within subjectData
-        console.log("Ethnicity:", subjectData.ethnicity);
-        console.log("Gender:", subjectData.gender);
-        console.log("Age:", subjectData.age);
-        console.log("Location:", subjectData.location);
-        console.log("bbtype:", subjectData.bbtype);
-        console.log("wfreq:", subjectData.wfreq);
-      } else {
-        console.log("Subject Data not found for ID:", id);
-      }
+      console.log(subjectData);
     });
   }
 
   
-  metaData(940);
+
 //Starts the charts and webpage
 d3.json(url).then((data) => {
 
@@ -120,9 +120,12 @@ d3.json(url).then((data) => {
     //for the chart
     dropdown.on("change", function () {
         let id = this.value;
+        //parseInt as the value in the metadata array is an integer and the value in namesList is a string
+        let idInt = parseInt(id, 10);
         //Updates the hBar function with the new selected ID
         hBar(id);
         bubbleChart(id);
+        metaData(idInt);
         
         console.log("This is the value of the id", id)
         
@@ -130,6 +133,9 @@ d3.json(url).then((data) => {
     // Initialize the chart with the first option in our list
     hBar(namesList[0]);
     bubbleChart(namesList[0]);
+    //parseInt as the value in the metadata array is an integer and the value in namesList is a string
+    metaData(parseInt(namesList[0]));
+
     
     console.log("Initial starting ID value", namesList[0]);
 });
