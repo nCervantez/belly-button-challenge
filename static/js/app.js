@@ -16,7 +16,7 @@ function hBar(id) {
       
       //All data from the samples array. 
       let sampleData = data.samples;
-      console.log(sampleData);
+      console.log("Bar Chart Data", sampleData);
 
       //This will update the charts based on the dropdown change
       let chartData = sampleData.find(sample => sample.id === id);
@@ -51,14 +51,14 @@ function bubbleChart(id) {
       
       //All data from the samples array. 
       let sampleData1 = data.samples;
-  
+      console.log("Bub Chart Data", sampleData1);
       //This will update the charts based on the dropdown change
       let chartData1 = sampleData1.find(sample => sample.id === id);
-      let bubVal = chartData1.sample_values.slice(0,10).reverse(); //Reverse the lists to have it in desc order for plotly.
-      let bubLabels = chartData1.otu_ids.slice(0,10).map((id) => `OTU ${id}`).reverse(); //Reverse the lists to have it in desc order for plotly.
-      let bubDesc = chartData1.otu_labels.slice(0,10).reverse(); //Reverse the lists to have it in desc order for plotly.
+      let bubVal = chartData1.sample_values.reverse(); //Reverse the lists to have it in desc order for plotly.
+      let bubLabels = chartData1.otu_ids.reverse(); //Reverse the lists to have it in desc order for plotly.
+      let bubDesc = chartData1.otu_labels.reverse(); //Reverse the lists to have it in desc order for plotly.
   
-      //creating the hBar chart
+      //creating the bubble chart
       let trace1 = {
         x: bubLabels,
         y: bubVal,
@@ -66,12 +66,23 @@ function bubbleChart(id) {
         mode: 'markers',
         marker: {color: bubLabels, 
                  size: bubVal}
-        
-      };
+};
 
       Plotly.newPlot('bubble', [trace1]);
-    
-  
+})};
+
+// Function to populate the demographic info chart
+function metaData(id) {
+    d3.json(url).then(function(data) {
+      
+        //All data from the metadata array. 
+        let demoData = data.metadata;
+        console.log("Meta Data: ", demoData);
+        let subjectData = demoData.find(sample => sample.id === id);
+        let keys = Object.keys(subjectData);
+        console.log(keys);
+        
+        
 })};
 
 
@@ -80,7 +91,7 @@ d3.json(url).then((data) => {
 
     //Setting the names list to add to the dropdown menu
     let namesList = data.names;
-    console.log(namesList);
+    console.log("id list", namesList);
     let dropdown = d3.select("#selDataset");
     
     //Will loop through the names list and add each id number to the drop down list
@@ -97,8 +108,10 @@ d3.json(url).then((data) => {
         //Updates the hBar function with the new selected ID
         hBar(id);
         bubbleChart(id);
+        metaData(id);
     });
     // Initialize the chart with the first option in our list
     hBar(namesList[0]);
     bubbleChart(namesList[0]);
+    metaData(namesList[0]);
 });
