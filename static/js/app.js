@@ -72,8 +72,6 @@ function bubbleChart(id) {
 })};
 
 // Function to populate the demographic info chart
-
-
 function metaData(id) {
     d3.json(url).then(function(data) {
       let demoData = data.metadata;
@@ -86,20 +84,18 @@ function metaData(id) {
       console.log("array keys", keys);
       console.log("array vals", vals);
 
+      let demoChart = d3.select(".panel-body");
+      //Will clear all data in the field before appending new data
+      demoChart.html("");
       
-      let demoChart = d3.select(".panel-body")
       for(i=0; i < keys.length; i++){
-        demoChart.append("label").text(`${keys[i]}: ${vals[i]}`);
-      }
-
-
-  
+        //Will add the keys and values as labels in text form into the demo info container
+        demoChart.append("h6").text(`${keys[i]}: ${vals[i]}`);
+}
       // Check if the subjectData is found
       console.log(subjectData);
     });
   }
-
-  
 
 //Starts the charts and webpage
 d3.json(url).then((data) => {
@@ -114,7 +110,7 @@ d3.json(url).then((data) => {
         (function(item) {
             dropdown.append("option").text(item).property("value", item);
         })(namesList[i]);
-    };
+};
 
     // Event listener for dropdown change. This will update the hBar function and pull the relevant data 
     //for the chart
@@ -126,16 +122,15 @@ d3.json(url).then((data) => {
         hBar(id);
         bubbleChart(id);
         metaData(idInt);
-        
         console.log("This is the value of the id", id)
         
-    });
+});
+
     // Initialize the chart with the first option in our list
     hBar(namesList[0]);
     bubbleChart(namesList[0]);
     //parseInt as the value in the metadata array is an integer and the value in namesList is a string
     metaData(parseInt(namesList[0]));
-
     
     console.log("Initial starting ID value", namesList[0]);
 });
